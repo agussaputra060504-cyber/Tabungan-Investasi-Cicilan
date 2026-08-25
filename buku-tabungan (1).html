@@ -1,0 +1,709 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --paper: #EFE7D6;
+  --paper-2: #E7DDC8;
+  --card: #F8F3E7;
+  --ink: #22303F;
+  --ink-soft: #5B6B7C;
+  --ink-faint: #8A96A3;
+  --stamp-red: #A6402E;
+  --stamp-red-soft: #C97A5A;
+  --ledger-green: #3D6B4C;
+  --ledger-green-soft: #6E9179;
+  --gold: #AE8A4F;
+  --slate: #4E7086;
+  --line: rgba(34,48,63,0.16);
+  --line-soft: rgba(34,48,63,0.08);
+  --shadow: 0 1px 2px rgba(34,48,63,0.06), 0 8px 24px rgba(34,48,63,0.08);
+}
+
+* { box-sizing: border-box; }
+
+.btb-root {
+  background: var(--paper);
+  background-image:
+    radial-gradient(circle at 1px 1px, var(--line-soft) 1px, transparent 0);
+  background-size: 22px 22px;
+  color: var(--ink);
+  font-family: 'IBM Plex Sans', sans-serif;
+  min-height: 100%;
+  padding: 40px 20px 64px;
+}
+
+.btb-wrap {
+  max-width: 840px;
+  margin: 0 auto;
+}
+
+/* ---------- Header / passbook cover ---------- */
+.btb-perf {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: -1px;
+}
+.btb-perf span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow: inset 0 1px 3px rgba(34,48,63,0.25);
+  border: 1px solid var(--line);
+}
+
+.btb-cover {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 4px 4px 0 0;
+  padding: 28px 32px 22px;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+.btb-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.btb-eyebrow::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.btb-title {
+  font-family: 'IBM Plex Serif', serif;
+  font-weight: 600;
+  font-size: 30px;
+  letter-spacing: -0.01em;
+  margin: 0 0 4px;
+}
+
+.btb-sub {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.btb-stamp {
+  position: absolute;
+  top: 22px;
+  right: 28px;
+  width: 76px;
+  height: 76px;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-8deg);
+  opacity: 0.85;
+}
+.btb-stamp-inner {
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  width: 62px;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--gold);
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* ---------- Stat strip ---------- */
+.btb-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-top: none;
+}
+.btb-stat {
+  background: var(--card);
+  padding: 18px 18px 16px;
+}
+.btb-stat-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+.btb-stat-value {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.btb-stat.in .btb-stat-value { color: var(--ledger-green); }
+.btb-stat.out .btb-stat-value { color: var(--stamp-red); }
+.btb-stat.balance {
+  background: var(--ink);
+}
+.btb-stat.balance .btb-stat-label { color: rgba(239,231,214,0.65); }
+.btb-stat.balance .btb-stat-value { color: var(--paper); font-size: 20px; }
+
+.btb-stat.nabung .btb-stat-value { color: var(--gold); }
+.btb-stat.cicilan .btb-stat-value { color: var(--slate); }
+
+@media (max-width: 640px) {
+  .btb-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ---------- Form ---------- */
+.btb-form-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-top: none;
+  padding: 22px 32px 26px;
+}
+
+.btb-form-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0 0 14px;
+}
+
+.btb-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.4fr 1fr auto;
+  gap: 12px;
+  align-items: end;
+}
+
+@media (max-width: 760px) {
+  .btb-form-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.btb-field { display: flex; flex-direction: column; gap: 6px; }
+.btb-field label {
+  font-size: 11px;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+.btb-field input, .btb-field select {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--paper);
+  color: var(--ink);
+  width: 100%;
+}
+.btb-field input:focus, .btb-field select:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+}
+.btb-field.amount input { font-family: 'IBM Plex Mono', monospace; }
+
+.btb-submit {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 600;
+  font-size: 13.5px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: 3px;
+  padding: 10px 18px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+}
+.btb-submit:hover { background: #16212D; }
+.btb-submit:active { transform: translateY(1px); }
+
+.btb-error {
+  font-size: 12px;
+  color: var(--stamp-red);
+  margin-top: 10px;
+  display: none;
+}
+.btb-error.show { display: block; }
+
+/* ---------- Ledger table ---------- */
+.btb-ledger-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  overflow: hidden;
+}
+
+.btb-ledger-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px 0;
+}
+.btb-ledger-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.btb-reset {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 11.5px;
+  color: var(--ink-faint);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.btb-reset:hover { color: var(--stamp-red); }
+
+.btb-table-wrap {
+  padding: 14px 32px 28px;
+  overflow-x: auto;
+}
+
+table.btb-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  min-width: 620px;
+}
+.btb-table thead th {
+  text-align: left;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 500;
+  padding: 0 10px 8px;
+  border-bottom: 1.5px solid var(--ink);
+}
+.btb-table thead th.num { text-align: right; }
+
+.btb-table tbody td {
+  padding: 11px 10px;
+  border-bottom: 1px dashed var(--line);
+  vertical-align: top;
+}
+.btb-table tbody tr:hover { background: rgba(174,138,79,0.07); }
+
+.btb-table td.tanggal {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.btb-table td.ket { color: var(--ink); }
+.btb-table td.ket .cat-badge {
+  display: inline-block;
+  margin-top: 3px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+}
+.cat-gaji { color: var(--ledger-green); }
+.cat-ortu { color: var(--stamp-red); }
+.cat-pribadi { color: var(--stamp-red-soft); }
+.cat-nabung { color: var(--gold); }
+.cat-cicilan { color: var(--slate); }
+
+.btb-table td.num {
+  font-family: 'IBM Plex Mono', monospace;
+  text-align: right;
+  white-space: nowrap;
+}
+.btb-table td.debit { color: var(--stamp-red); }
+.btb-table td.kredit { color: var(--ledger-green); }
+.btb-table td.saldo { font-weight: 600; }
+
+.btb-del {
+  background: none;
+  border: none;
+  color: var(--ink-faint);
+  cursor: pointer;
+  font-size: 15px;
+  line-height: 1;
+  padding: 2px 4px;
+  visibility: hidden;
+}
+.btb-table tbody tr:hover .btb-del { visibility: visible; }
+.btb-del:hover { color: var(--stamp-red); }
+
+.btb-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--ink-faint);
+  font-size: 13.5px;
+}
+.btb-empty .big { font-size: 26px; display: block; margin-bottom: 10px; }
+
+.btb-loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--ink-soft);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12.5px;
+}
+
+.btb-footer-note {
+  text-align: center;
+  font-size: 11px;
+  color: var(--ink-faint);
+  margin-top: 14px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+</style>
+
+<div class="btb-root">
+  <div class="btb-wrap">
+    <div class="btb-perf">
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <div class="btb-cover">
+      <div class="btb-eyebrow">Buku Tabungan Pribadi</div>
+      <h1 class="btb-title">Rekap Keuangan Saya</h1>
+      <p class="btb-sub">Gaji masuk, uang untuk orang tua, dan kebutuhan pribadi — dicatat live di satu halaman.</p>
+      <div class="btb-stamp">
+        <div class="btb-stamp-inner">SALDO<br/>TERCATAT</div>
+      </div>
+    </div>
+
+    <div class="btb-stats">
+      <div class="btb-stat in">
+        <div class="btb-stat-label">Total Gaji Masuk</div>
+        <div class="btb-stat-value" id="statGaji">Rp 0</div>
+      </div>
+      <div class="btb-stat out">
+        <div class="btb-stat-label">Untuk Orang Tua</div>
+        <div class="btb-stat-value" id="statOrtu">Rp 0</div>
+      </div>
+      <div class="btb-stat out">
+        <div class="btb-stat-label">Kebutuhan Pribadi</div>
+        <div class="btb-stat-value" id="statPribadi">Rp 0</div>
+      </div>
+      <div class="btb-stat nabung">
+        <div class="btb-stat-label">Tabungan / Investasi</div>
+        <div class="btb-stat-value" id="statNabung">Rp 0</div>
+      </div>
+      <div class="btb-stat cicilan">
+        <div class="btb-stat-label">Cicilan</div>
+        <div class="btb-stat-value" id="statCicilan">Rp 0</div>
+      </div>
+      <div class="btb-stat balance">
+        <div class="btb-stat-label">Sisa Kas</div>
+        <div class="btb-stat-value" id="statSaldo">Rp 0</div>
+      </div>
+    </div>
+
+    <div class="btb-form-card">
+      <p class="btb-form-title">Catat transaksi baru</p>
+      <form id="btbForm" class="btb-form-grid">
+        <div class="btb-field">
+          <label for="fTanggal">Tanggal</label>
+          <input type="date" id="fTanggal" required />
+        </div>
+        <div class="btb-field">
+          <label for="fKategori">Kategori</label>
+          <select id="fKategori" required>
+            <option value="gaji">Gaji (masuk)</option>
+            <option value="ortu">Untuk orang tua (keluar)</option>
+            <option value="pribadi">Kebutuhan pribadi (keluar)</option>
+            <option value="nabung">Tabungan / investasi (keluar)</option>
+            <option value="cicilan">Cicilan (keluar)</option>
+          </select>
+        </div>
+        <div class="btb-field">
+          <label for="fKet">Keterangan</label>
+          <input type="text" id="fKet" placeholder="mis. Gaji Agustus, kirim bulanan..." />
+        </div>
+        <div class="btb-field amount">
+          <label for="fJumlah">Jumlah (Rp)</label>
+          <input type="number" id="fJumlah" min="0" step="1000" placeholder="0" required />
+        </div>
+        <button type="submit" class="btb-submit">+ Catat</button>
+      </form>
+      <p class="btb-error" id="btbError">Isi tanggal dan jumlah dengan benar dulu ya.</p>
+    </div>
+
+    <div class="btb-ledger-card">
+      <div class="btb-ledger-head">
+        <span class="btb-ledger-title">Riwayat Transaksi</span>
+        <button class="btb-reset" id="btbReset">Hapus semua data</button>
+      </div>
+      <div class="btb-table-wrap" id="btbTableWrap">
+        <div class="btb-loading">Memuat catatan tersimpan…</div>
+      </div>
+    </div>
+
+    <div class="btb-ledger-card" style="margin-top: 20px; border-top: 1px solid var(--line);">
+      <div class="btb-ledger-head">
+        <span class="btb-ledger-title">Rekap Bulanan</span>
+      </div>
+      <div class="btb-table-wrap" id="btbMonthlyWrap"></div>
+    </div>
+
+    <p class="btb-footer-note" id="btbFooterNote"></p>
+  </div>
+</div>
+
+<script>
+(function () {
+  const STORAGE_KEY = 'buku-tabungan:transactions';
+  let transactions = [];
+
+  const CAT_META = {
+    gaji:    { label: 'Gaji masuk',        dir: 'in',  cls: 'cat-gaji' },
+    ortu:    { label: 'Untuk orang tua',   dir: 'out', cls: 'cat-ortu' },
+    pribadi: { label: 'Kebutuhan pribadi', dir: 'out', cls: 'cat-pribadi' },
+    nabung:  { label: 'Tabungan / investasi', dir: 'out', cls: 'cat-nabung' },
+    cicilan: { label: 'Cicilan',           dir: 'out', cls: 'cat-cicilan' },
+  };
+  const MONTH_ORDER = ['gaji', 'ortu', 'pribadi', 'nabung', 'cicilan'];
+
+  const $ = (sel) => document.querySelector(sel);
+  const tableWrap = $('#btbTableWrap');
+  const errorEl = $('#btbError');
+  const footerNote = $('#btbFooterNote');
+
+  function formatRupiah(n) {
+    const sign = n < 0 ? '-' : '';
+    return sign + 'Rp ' + Math.abs(Math.round(n)).toLocaleString('id-ID');
+  }
+
+  function todayISO() {
+    const d = new Date();
+    return d.toISOString().slice(0, 10);
+  }
+
+  function formatTanggal(iso) {
+    try {
+      const d = new Date(iso + 'T00:00:00');
+      return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+    } catch (e) { return iso; }
+  }
+
+  async function loadData() {
+    try {
+      const res = await window.storage.get(STORAGE_KEY, false);
+      transactions = res && res.value ? JSON.parse(res.value) : [];
+    } catch (e) {
+      transactions = [];
+    }
+    render();
+  }
+
+  async function saveData() {
+    try {
+      const result = await window.storage.set(STORAGE_KEY, JSON.stringify(transactions), false);
+      if (!result) {
+        footerNote.textContent = 'Gagal menyimpan — coba catat ulang transaksi terakhir.';
+      } else {
+        footerNote.textContent = 'Tersimpan otomatis di perangkat ini.';
+      }
+    } catch (e) {
+      footerNote.textContent = 'Gagal menyimpan — coba catat ulang transaksi terakhir.';
+    }
+  }
+
+  function computeTotals() {
+    let gaji = 0, ortu = 0, pribadi = 0, nabung = 0, cicilan = 0;
+    for (const t of transactions) {
+      if (t.kategori === 'gaji') gaji += t.jumlah;
+      else if (t.kategori === 'ortu') ortu += t.jumlah;
+      else if (t.kategori === 'pribadi') pribadi += t.jumlah;
+      else if (t.kategori === 'nabung') nabung += t.jumlah;
+      else if (t.kategori === 'cicilan') cicilan += t.jumlah;
+    }
+    const saldo = gaji - ortu - pribadi - nabung - cicilan;
+    return { gaji, ortu, pribadi, nabung, cicilan, saldo };
+  }
+
+  function computeMonthlyRecap(sortedAsc) {
+    const map = {};
+    let running = 0;
+    for (const t of sortedAsc) {
+      const meta = CAT_META[t.kategori];
+      running += meta.dir === 'in' ? t.jumlah : -t.jumlah;
+      const mk = t.tanggal.slice(0, 7);
+      if (!map[mk]) map[mk] = { gaji: 0, ortu: 0, pribadi: 0, nabung: 0, cicilan: 0, endSaldo: 0 };
+      map[mk][t.kategori] += t.jumlah;
+      map[mk].endSaldo = running;
+    }
+    return Object.keys(map).sort().map((mk) => ({ monthKey: mk, ...map[mk] }));
+  }
+
+  function formatBulan(monthKey) {
+    const d = new Date(monthKey + '-01T00:00:00');
+    return d.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+  }
+
+  function render() {
+    const { gaji, ortu, pribadi, nabung, cicilan, saldo } = computeTotals();
+    $('#statGaji').textContent = formatRupiah(gaji);
+    $('#statOrtu').textContent = formatRupiah(ortu);
+    $('#statPribadi').textContent = formatRupiah(pribadi);
+    $('#statNabung').textContent = formatRupiah(nabung);
+    $('#statCicilan').textContent = formatRupiah(cicilan);
+    $('#statSaldo').textContent = formatRupiah(saldo);
+
+    if (transactions.length === 0) {
+      tableWrap.innerHTML = '<div class="btb-empty"><span class="big">—</span>Belum ada catatan. Transaksi pertama kamu akan muncul di sini.</div>';
+      renderMonthly([]);
+      return;
+    }
+
+    const sorted = [...transactions].sort((a, b) => {
+      if (a.tanggal !== b.tanggal) return a.tanggal < b.tanggal ? -1 : 1;
+      return a.seq - b.seq;
+    });
+
+    let running = 0;
+    const rows = sorted.map((t) => {
+      const meta = CAT_META[t.kategori];
+      const isIn = meta.dir === 'in';
+      running += isIn ? t.jumlah : -t.jumlah;
+      const ketText = t.keterangan ? t.keterangan : meta.label;
+      return `
+        <tr data-id="${t.id}">
+          <td class="tanggal">${formatTanggal(t.tanggal)}</td>
+          <td class="ket">${escapeHtml(ketText)}<br/><span class="cat-badge ${meta.cls}">${meta.label}</span></td>
+          <td class="num debit">${!isIn ? formatRupiah(t.jumlah) : ''}</td>
+          <td class="num kredit">${isIn ? formatRupiah(t.jumlah) : ''}</td>
+          <td class="num saldo">${formatRupiah(running)}</td>
+          <td><button class="btb-del" data-id="${t.id}" title="Hapus catatan ini">×</button></td>
+        </tr>`;
+    }).join('');
+
+    tableWrap.innerHTML = `
+      <table class="btb-table">
+        <thead>
+          <tr>
+            <th>Tanggal</th>
+            <th>Keterangan</th>
+            <th class="num">Keluar</th>
+            <th class="num">Masuk</th>
+            <th class="num">Saldo</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+
+    tableWrap.querySelectorAll('.btb-del').forEach((btn) => {
+      btn.addEventListener('click', () => deleteTransaction(btn.getAttribute('data-id')));
+    });
+
+    renderMonthly(sorted);
+  }
+
+  function renderMonthly(sortedAsc) {
+    const monthlyWrap = $('#btbMonthlyWrap');
+    if (!sortedAsc.length) {
+      monthlyWrap.innerHTML = '<div class="btb-empty"><span class="big">—</span>Rekap bulanan muncul setelah ada transaksi.</div>';
+      return;
+    }
+    const months = computeMonthlyRecap(sortedAsc);
+    const rows = months.map((m) => `
+      <tr>
+        <td class="ket">${formatBulan(m.monthKey)}</td>
+        <td class="num kredit">${m.gaji ? formatRupiah(m.gaji) : '—'}</td>
+        <td class="num debit">${m.ortu ? formatRupiah(m.ortu) : '—'}</td>
+        <td class="num debit">${m.pribadi ? formatRupiah(m.pribadi) : '—'}</td>
+        <td class="num" style="color:var(--gold);">${m.nabung ? formatRupiah(m.nabung) : '—'}</td>
+        <td class="num" style="color:var(--slate);">${m.cicilan ? formatRupiah(m.cicilan) : '—'}</td>
+        <td class="num saldo">${formatRupiah(m.endSaldo)}</td>
+      </tr>`).join('');
+
+    monthlyWrap.innerHTML = `
+      <table class="btb-table">
+        <thead>
+          <tr>
+            <th>Bulan</th>
+            <th class="num">Gaji</th>
+            <th class="num">Ortu</th>
+            <th class="num">Pribadi</th>
+            <th class="num">Tabungan</th>
+            <th class="num">Cicilan</th>
+            <th class="num">Sisa Kas Akhir</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  }
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  async function deleteTransaction(id) {
+    transactions = transactions.filter((t) => t.id !== id);
+    render();
+    await saveData();
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const tanggal = $('#fTanggal').value;
+    const kategori = $('#fKategori').value;
+    const keterangan = $('#fKet').value.trim();
+    const jumlah = parseFloat($('#fJumlah').value);
+
+    if (!tanggal || !jumlah || jumlah <= 0) {
+      errorEl.classList.add('show');
+      return;
+    }
+    errorEl.classList.remove('show');
+
+    transactions.push({
+      id: 'tx_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+      seq: transactions.length,
+      tanggal, kategori, keterangan, jumlah,
+    });
+
+    render();
+    $('#btbForm').reset();
+    $('#fTanggal').value = todayISO();
+    await saveData();
+  }
+
+  async function handleReset() {
+    if (!confirm('Hapus semua catatan transaksi? Tindakan ini tidak bisa dibatalkan.')) return;
+    transactions = [];
+    render();
+    await saveData();
+  }
+
+  $('#fTanggal').value = todayISO();
+  $('#btbForm').addEventListener('submit', handleSubmit);
+  $('#btbReset').addEventListener('click', handleReset);
+
+  loadData();
+})();
+</script>
